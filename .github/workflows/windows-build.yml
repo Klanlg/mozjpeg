@@ -1,9 +1,12 @@
 name: Static MozJPEG Release
 
 on:
-  push:
-    tags:
-      - 'v*'  # e.g. v1.0.0, v2.3.5
+  workflow_dispatch:
+    inputs:
+      opencv-version:
+        description: dxc
+        required: true
+        default: 4.5.2
 
 jobs:
   build:
