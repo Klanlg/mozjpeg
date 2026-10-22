@@ -26,33 +26,60 @@ jobs:
         shell: powershell
 
       - name: 📂 Create build directory
-        run: mkdir build
+        run: |
+          mkdir static
+          mkdir shared
 
       - name: ⚙️ Configure CMake
         run: |
-          cd build
+          cd static
           cmake .. ^
             -G "Visual Studio 17 2022" ^
             -A x64 ^
             -DCMAKE_BUILD_TYPE=Release ^
             -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ^
             -DCMAKE_PREFIX_PATH="D:/a/mozjpeg/mozjpeg/vcpkg/installed/x64-windows-static" ^
-            -DBUILD_SHARED_LIBS=OFF ^
-            -DWITH_TURBOJPEG=OFF ^
+            -DBUILD_SHARED_LIBS=ON ^
+            -DWITH_TURBOJPEG=ON ^
             -DWITH_JAVA=OFF ^
             -DENABLE_SHARED=OFF ^
             -DENABLE_STATIC=ON ^
             -DWITH_EXAMPLES=ON
+          cd ../shared
+          cmake .. ^
+            -G "Visual Studio 17 2022" ^
+            -A x64 ^
+            -DCMAKE_BUILD_TYPE=Release ^
+            -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ^
+            -DCMAKE_PREFIX_PATH="D:/a/mozjpeg/mozjpeg/vcpkg/installed/x64-windows-static" ^
+            -DBUILD_SHARED_LIBS=ON ^
+            -DWITH_TURBOJPEG=ON ^
+            -DWITH_JAVA=OFF ^
+            -DENABLE_SHARED=ON ^
+            -DENABLE_STATIC=OFF ^
+            -DWITH_EXAMPLES=ON
+          cd ../
+          
         shell: cmd
 
       - name: 🧱 Build project
-        run: cmake --build build --config Release
+        run: |
+          cmake --build static --config Release
+          cmake --build shared --config Release
+          7z a -mqs -mx=9 -ms=on ar1.7z -ir!*lib -ir!*log -ir!*obj
         shell: cmd
 
-      - name: 📦 Upload to GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: Upload Windows x64
+        uses: actions/upload-artifact@v7
         with:
-          files: |
-            build/Release/*.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: x64rel
+          path: .\*.7z
+
+
+      #- name: 📦 Upload to GitHub Release
+      #  uses: softprops/action-gh-release@v2
+      #  with:
+      #    files: |
+      #      build/Release/*.exe
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
