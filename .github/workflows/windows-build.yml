@@ -46,6 +46,7 @@ jobs:
             -DWITH_TURBOJPEG=ON ^
             -DWITH_JAVA=OFF ^
             -DENABLE_SHARED=OFF ^
+            -DPNG_SUPPORTED=0 ^
             -DENABLE_STATIC=ON ^
             -DWITH_EXAMPLES=ON
           cd ../shared
@@ -59,6 +60,7 @@ jobs:
             -DWITH_TURBOJPEG=ON ^
             -DWITH_JAVA=OFF ^
             -DENABLE_SHARED=ON ^
+            -DPNG_SUPPORTED=0 ^
             -DENABLE_STATIC=OFF ^
             -DWITH_EXAMPLES=ON
           cd ../
