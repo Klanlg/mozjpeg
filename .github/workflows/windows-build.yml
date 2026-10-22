@@ -37,7 +37,7 @@ jobs:
         run: |
           cd static
           cmake .. ^
-            -G "Visual Studio 17 2022" ^
+            -G "Visual Studio" ^
             -A x64 ^
             -DCMAKE_BUILD_TYPE=Release ^
             -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ^
@@ -50,7 +50,7 @@ jobs:
             -DWITH_EXAMPLES=ON
           cd ../shared
           cmake .. ^
-            -G "Visual Studio 17 2022" ^
+            -G "Visual Studio" ^
             -A x64 ^
             -DCMAKE_BUILD_TYPE=Release ^
             -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ^
