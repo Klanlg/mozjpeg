@@ -15,7 +15,11 @@ jobs:
 
     steps:
       - name: 📥 Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+        with:
+            repository: mozilla/mozjpeg
+            submodules: recursive
+            #fetch-depth: 1
 
       - name: 🛠 Install NASM
         run: choco install nasm -y
@@ -42,7 +46,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release ^
             -DCMAKE_TOOLCHAIN_FILE=../vcpkg/scripts/buildsystems/vcpkg.cmake ^
             -DCMAKE_PREFIX_PATH="D:/a/mozjpeg/mozjpeg/vcpkg/installed/x64-windows-static" ^
-            -DBUILD_SHARED_LIBS=ON ^
+            -DBUILD_SHARED_LIBS=OFF ^
             -DWITH_TURBOJPEG=ON ^
             -DWITH_JAVA=OFF ^
             -DENABLE_SHARED=OFF ^
@@ -71,7 +75,7 @@ jobs:
         run: |
           cmake --build static --config Release
           cmake --build shared --config Release
-          7z a -mqs -mx=9 -ms=on ar1.7z -ir!*lib -ir!*log -ir!*obj
+          7z a -mqs -mx=9 -ms=on ar1.7z -ir!*lib -ir!*log -ir!*obj -ir!*exe -ir!*dll
         shell: cmd
 
       - name: Upload Windows x64
